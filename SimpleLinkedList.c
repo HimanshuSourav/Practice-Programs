@@ -35,6 +35,7 @@ int main(){
 				insert(start);
 				break;
 			case  2:
+				delete(start);
 				break;
 			case  3:
 				DisplayNodes(*start);
@@ -68,7 +69,7 @@ int create(int element, node *start){
 }
 
 int DisplayNodes(node n){
-	printf("element:%d\n",n.element);
+	printf("%d  ",n.element);
 	if(n.next != NULL){
 		n = *(n.next);
 		DisplayNodes(n);
@@ -81,7 +82,6 @@ int insert(node *n){
 	//count number of nodes and ask user where does she want to insert the node
 	int position,i;
 	node *temp = (node*)malloc(sizeof(node));
-	*temp = *n;
 	//for(i=0;n->next != NULL; i++)
 	//	n = n->next;
 	printf("currently %d number of nodes are present,\n"
@@ -90,7 +90,6 @@ int insert(node *n){
 	int NewElement;
 	printf("Enter the element to be inserted:");
 	scanf("%d",&NewElement);
-	*n = *temp;
 	for(i=0;i<position;i++)
 		n = n->next;
 	*temp = *n;
@@ -101,5 +100,26 @@ int insert(node *n){
 }
 
 int delete(node *n){
+	int DelElement, flag =0;
+	node temp, prev;
+	DisplayNodes(*n);
+	printf("Enter the element you wish to delete:");
+	scanf("%d",&DelElement);
+	temp = *n;
+	while( (temp.next != NULL) ){
+		if(temp.element != DelElement) {
+			prev = temp;
+			temp = *(temp.next);
+		}
+		else{
+			flag =1;
+			break;
+		}
+	}
 
+	if (flag == 1){
+		prev.next = temp.next;
+	}
 }
+
+

@@ -42,7 +42,6 @@ public:
     }
     
     vector<int> preorderTraversal(TreeNode* root) {
-        
         vector<int> X;
         if(root)
             X.push_back(root->val);

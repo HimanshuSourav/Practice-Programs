@@ -41,7 +41,6 @@ public:
     {
         string:: iterator it;
         stack<char> st;
-
         for(it = s.begin(); it!= s.end(); it++)
         {
             if(isStartingBracket(*it))
@@ -64,7 +63,6 @@ public:
         if(st.empty())
             return true;
         else
-            return false;
-        
+            return false;       
     }
 };

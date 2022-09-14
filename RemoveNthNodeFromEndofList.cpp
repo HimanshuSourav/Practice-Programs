@@ -45,7 +45,6 @@ public:
             {
                 Prev = Curr;
                 Curr = Curr->next;
-
             }
             if( Prev !=NULL && Curr != NULL)
             {

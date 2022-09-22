@@ -1,0 +1,24 @@
+class Solution {
+public:
+       
+    bool isSubsequence(string s, string t) {
+        
+        string::iterator itS, itT;
+        itS = s.begin();
+        itT = t.begin();
+        
+        for(itS = s.begin(),itT = t.begin();itS!= s.end();itT++)
+        {
+            if(*itS == *itT)
+            {
+                itS++;
+            }
+            else
+            {
+                if(itT == t.end())
+                    return false;
+            }
+        }
+        return true;      
+    }
+};

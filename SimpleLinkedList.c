@@ -1,125 +1,230 @@
-#include <stdio.h>
-#include <stdlib.h>
+// Project2.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
 
-#define Error -1
-
-struct Node{
-	int element;
-	struct Node *next;
-//	struct Node *previous;
-};
-typedef struct Node node;
-
-int DisplayMenu();
-int create(int element, node* start);
-int delete();
-int insert();
-int search();
-int DisplayNodes(node);
+#include <iostream>
 
 
-int main(){
-	node *start;int choice;
-	while(Error != (choice = DisplayMenu())){
-		switch(choice){
-			case -1:
-				return 0;//exit option
-				break;
-			case  0:
-				//struct Node *start;
-				start = (node*) malloc(sizeof(node));
-				create(5,start);
-				DisplayNodes(*start);
-				break;
-			case  1:
-				insert(start);
-				break;
-			case  2:
-				delete(start);
-				break;
-			case  3:
-				DisplayNodes(*start);
-				break;
-			default:
-				break;
-		}
-	}
+typedef struct Node {
+    int data;
+    Node* next;
+}Node;
 
-	return 0;
+void LinkedList();
+unsigned int DisplayMenu();
+void AddToList(Node*);
+void CreateList(Node*);
+void DisplayNodes(Node* Head);
+void ReverseList(Node* Head);
+Node* removeNthFromEnd(Node* head, int n);
+
+Node* removeNthFromEndRecursion(Node* head, int n);
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+    //1. Linked List
+    LinkedList();
 }
 
-int DisplayMenu(){
-	int ch;
-	printf("Simple Linked List Program\n\nPlease Enter your choice:\n\n\t");
-	printf("a. Exit   -1\n \t"
-	       "b. Create  0\n \t"
-		"c. Insert  1\n \t"
-		"d. Delete  2\n \t"
-		"e. Display 3\n \t"
-		"\n\tchoice:");
-	scanf("%d",&ch);
-	return ch;
+
+void LinkedList()
+{
+    //0. List
+    Node* Head = (Node*)malloc(sizeof(Node));
+    if(Head==NULL)
+        EXIT_FAILURE;
+    Head->data = 0;
+    Head->next = NULL;
+
+    //1. Display Menu
+    int ch = DisplayMenu();
+
+    switch (ch)
+    {
+        case 0:
+            //a. add/create list
+            AddToList(Head);
+            break;
+        case 1:
+            //b. insert at position
+            break;
+        case 2:
+            //c. delete at position/element
+            break;
+        case 3:
+            //d. reverse the list
+            ReverseList(Head);
+            printf("\n-------------Reversed--------\n");
+            DisplayNodes(Head);
+            break;
+        case 4:
+            //e. create linked list with n nodes
+            CreateList(Head);
+            DisplayNodes(Head);
+          
+            
+            break;
+        case 5:
+            //f. delete Nth node from end
+            CreateList(Head);
+            DisplayNodes(Head);
+            removeNthFromEndRecursion(Head, 6);
+            printf("\n-------------After deletion of Nth Node--------\n");
+            DisplayNodes(Head);
+        default:
+            EXIT_FAILURE;
+            break;
+    }
 }
 
-int create(int element, node *start){
-	 start->element  = 11;
-	 //start->previous = NULL;
-	 start->next     = NULL;
-	 return 0;
+unsigned int DisplayMenu()
+{
+    unsigned int ch;
+
+    printf("\nAdd Node\t\t:0"
+           "\nDelete Node\t\t:1"
+        "\ncreate linked list\t:4"
+           "\nEnter Choice:");
+    scanf_s(" %d", &ch);
+    return ch;
 }
 
-int DisplayNodes(node n){
-	printf("%d  ",n.element);
-	if(n.next != NULL){
-		n = *(n.next);
-		DisplayNodes(n);
-	}
-	else
-		return 0;
+void DisplayNodes(Node* Head)
+{
+    Node* Current = Head;
+    unsigned count = 1;
+    while (Current != NULL)
+    {
+        printf("\nAddress:(0x%p) | Node %d: | data:%d next:%p", Current, count, Current->data, Current->next);
+        Current = ((Node*)(Current->next));
+        count++;
+    }
+}
+void AddToList(Node* Head)
+{
+
+    Node *New = (Node*)malloc(sizeof(Node));
+    Node *Curr;
+    printf("\nEnter Node Value to Enter:");
+    scanf_s("%d", New->data);
+    
+    Curr = Head;
+    while(Curr)
+    {
+        if (Curr->next)
+            Curr = Curr->next;
+        else
+        {
+            Curr->next = New;
+            break;
+        }
+    }
+    DisplayNodes(Head);
+    
+
+    
 }
 
-int insert(node *n){
-	//count number of nodes and ask user where does she want to insert the node
-	int position,i;
-	node *temp = (node*)malloc(sizeof(node));
-	//for(i=0;n->next != NULL; i++)
-	//	n = n->next;
-	printf("currently %d number of nodes are present,\n"
-		"please enter the position, where you wish to insert the element:",i);
-	scanf("%d",&position);
-	int NewElement;
-	printf("Enter the element to be inserted:");
-	scanf("%d",&NewElement);
-	for(i=0;i<position;i++)
-		n = n->next;
-	*temp = *n;
-	n->next       = temp;
-	n->element    = NewElement;
+void CreateList(Node* Head)
+{
+    Node* Curr = Head;
 
-	return 0;
+    for (unsigned int i = 0; i < 10; i++)
+    {
+        Curr->data = i;
+        
+        
+        if (i == 9)
+        {
+            Curr->next = NULL;
+        }
+        else
+        {
+            Curr->next = (Node*)malloc(sizeof(Node));
+            if (Curr->next == NULL)
+                printf("OOM");
+            Curr = ((Node*)Curr->next);
+        }
+            
+    }
+    Curr = NULL;
 }
 
-int delete(node *n){
-	int DelElement, flag =0;
-	node temp, prev;
-	DisplayNodes(*n);
-	printf("Enter the element you wish to delete:");
-	scanf("%d",&DelElement);
-	temp = *n;
-	while( (temp.next != NULL) ){
-		if(temp.element != DelElement) {
-			prev = temp;
-			temp = *(temp.next);
-		}
-		else{
-			flag =1;
-			break;
-		}
-	}
+void ReverseList(Node* Head)
+{
+    Node* Prev = NULL;
+    Node* Curr = Head;
+    Node* Next = NULL;
 
-	if (flag == 1){
-		prev.next = temp.next;
-	}
+    while (Curr != NULL)
+    {
+        Next = Curr->next;
+        Curr->next = Prev;
+        Prev = Curr;
+        Curr = Next;
+    }
+    Head = Prev;
+    DisplayNodes(Head);
 }
 
+
+Node* removeNthFromEnd(Node* head, int n) {
+    if (head == NULL)
+        return head;
+
+    unsigned int Count = 0;
+    Node* Curr = NULL, * Temp = NULL;
+    Curr = head;
+    while (Curr->next != NULL)
+    {
+        Curr = Curr->next;
+        Count++;
+    }
+
+    
+    if (head != NULL)
+    {
+        Curr = head;
+        for (unsigned int i = 1; (i <= Count - n + 1); i++)
+        {
+            Temp = Curr;
+            Curr = Curr->next;
+
+        }
+        if(Temp !=NULL && Curr !=NULL)
+         Temp->next = Curr->next;
+        //free(Curr);
+        return head;
+    }
+    else
+        return head;
+}
+
+
+Node* removeNthFromEndRecursion(Node* head, int n) {
+
+    if (head == NULL)
+        return head;
+
+    head->next = removeNthFromEndRecursion(head->next, n);
+    n = n - 1;
+    
+    if (n == 0)
+        return head->next;
+
+    return head;
+}
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
 
